@@ -48,8 +48,7 @@ def part2(input_data):
             data[(bank_id + offset) % len(data)] += 1
             blocks -= 1
             offset += 1
-    seen = {}
-    seen[tuple(data)] = 0
+    seen = {tuple(data): 0}
     cycles = 0
     while True:
         cycles += 1
