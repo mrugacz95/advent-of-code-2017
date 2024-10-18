@@ -102,6 +102,30 @@ def part2_slow(input_data):
     return delay
 
 
+def mod(x, p):
+    return ((x % p) + p) % p
+
+
+def part2_fast(input_data):
+    delay = 0
+    progres = tqdm.tqdm()
+    layers = parse(input_data)
+    while True:
+        progres.update(1)
+        def simulate():
+            for layer, depth in layers.items():
+                x = delay + layer
+                p = depth - 1
+                y = 2 * abs(mod(x / 2 , p) - p / 2) - p # triangle wave function
+                if y == 0:
+                    return False
+            return True
+        if simulate():
+            break
+        delay += 1
+    return delay
+
+
 def main():
     assert 24 == part1(puzzle.examples[0].input_data)
     print("part1 example OK")
@@ -112,7 +136,10 @@ def main():
     assert 10 == part2_slow(puzzle.examples[0].input_data)
     print("part2 slow example OK")
 
-    puzzle.answer_b = part2_slow(puzzle.input_data)
+    assert 10 == part2_fast(puzzle.examples[0].input_data)
+    print("part2 fast example OK")
+
+    puzzle.answer_b = part2_fast(puzzle.input_data)
     print("part2 OK")
 
 
