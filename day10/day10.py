@@ -10,7 +10,7 @@ def parse_part1(input_data):
     return list(map(int, input_data.split(",")))
 
 
-def knot_hash(sequence, lengths):
+def twist_sequence(sequence, lengths):
     result = sequence.copy()
     pos = 0
     skip_size = 0
@@ -25,7 +25,7 @@ def knot_hash(sequence, lengths):
 
 def part1(sequence, input_data):
     lengths = parse_part1(input_data)
-    hashed = knot_hash(sequence, lengths)
+    hashed = twist_sequence(sequence, lengths)
     return hashed[0] * hashed[1]
 
 
@@ -33,7 +33,7 @@ def parse_part2(input_data):
     return list(map(ord, ''.join(input_data.split(", "))))
 
 
-def full_knot_hash(pos, skip_size, sequence, lengths):
+def full_twist_sequence(pos, skip_size, sequence, lengths):
     result = sequence.copy()
     for length in lengths:
         for offset in range(length // 2):
@@ -58,15 +58,19 @@ def to_hex(sequence):
     return result
 
 
-def part2(input_data):
+def knot_hash(data):
+    lengths = parse_part2(data) + [17, 31, 73, 47, 23]
     sequence = list(range(256))
-    lengths = parse_part2(input_data) + [17, 31, 73, 47, 23]
     pos, skip_size = 0, 0
     for i in range(64):
-        sequence, pos, skip_size = full_knot_hash(pos, skip_size, sequence, lengths)
+        sequence, pos, skip_size = full_twist_sequence(pos, skip_size, sequence, lengths)
     sequence = to_dense_hash(sequence)
     hexed = to_hex(sequence)
     return hexed
+
+
+def part2(input_data):
+    return knot_hash(input_data)
 
 
 def main():
